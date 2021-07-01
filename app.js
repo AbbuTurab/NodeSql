@@ -53,13 +53,23 @@ app.get('/addpost1', (req, res)=>{
 app.get('/addpost2', (req, res)=>{
   let post = {title: 'Post Two', body: 'This is Post Two body'}
   let sql = 'INSERT INTO Posts SET ?'
-  db.query(sql, post, (err, result)=>{
+  db.query(sql, post, (err, results)=>{
     if(err) throw err
-    console.log(result);
+    console.log(results);
     res.send('Data added to table')
   })
 })
 //Get Post
+app.get('/getpost/:id', (req, res)=>{
+  // let post = {title: 'Post Two', body: 'This is Post Two body'}
+  let sql = `SELECT * FROM Posts WHERE id=${req.params.id}`
+  let query = db.query(sql, (err, result)=>{
+    if(err) throw err
+    console.log(result);
+    res.send('Posts Fetched...')
+  })
+})
+//select post
 app.get('/getpost', (req, res)=>{
   // let post = {title: 'Post Two', body: 'This is Post Two body'}
   let sql = 'SELECT * FROM Posts'
@@ -69,6 +79,17 @@ app.get('/getpost', (req, res)=>{
     res.send('Posts Fetched...')
   })
 })
+//Update post
+app.get('/updatepost/:id', (req, res)=>{
+  let newTitle = 'Updated Title'
+  let sql = `UPDATE Posts SET title='${newTitle}' WHERE id=${req.params.id}`
+  let query = db.query(sql, (err, result)=>{
+    if(err) throw err
+    console.log(result);
+    res.send('Post updated...')
+  })
+})
+
 
 app.listen('9000', () => {
   console.log(`Server started on port 9000`);
